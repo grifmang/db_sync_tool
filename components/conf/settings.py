@@ -1,1 +1,2 @@
 LOG_DIR = "."
+CONFIG_FILE_DIR = ""
