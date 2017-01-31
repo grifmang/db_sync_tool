@@ -1,1 +1,1 @@
-export $PGPASSFILE=./components/conf/.pgpass
+export PGPASSFILE=./components/conf/.pgpass
