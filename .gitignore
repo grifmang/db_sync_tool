@@ -2,4 +2,5 @@
 *.pyc
 log/
 sql_dumps/
+.cache/
 
