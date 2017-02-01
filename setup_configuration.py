@@ -11,6 +11,8 @@ from components import config_handler
 class SetupConfiguration:
     def __init__(self):
         self.python_venv_name = None
+        self.venv_python_path = None
+        self.project_working_directory = os.path.dirname(__file__)
         self.user_home_dir = os.environ['HOME']
         self.current_user = getpass.getuser()
         self.db_config_handler = config_handler.DBConfiguration()
@@ -18,7 +20,13 @@ class SetupConfiguration:
 
     def initialize_configuration(self):
         try:
-            self.python_venv_name = raw_input("Enter python virtual environment name")
+            self.python_venv_name = raw_input("Enter python virtual environment name: ")
+            if self.python_venv_name != "":
+                self.venv_python_path = os.path.join(self.user_home_dir,
+                                                     ".virtualenvs",
+                                                     self.python_venv_name,
+                                                     "bin",
+                                                     "python")
             print("\n")
             print("select the configuration section as per your environment")
             print("\n")
@@ -57,13 +65,20 @@ class SetupConfiguration:
 
             if current_section == "remote-db-setting":
                 print("Initiating db_dump_importer server...")
-                subprocess.Popen("nohup /home/sud/.virtualenvs/new_env/bin/python ./db_dump_importer.py &".split())
+                db_importer_path = os.path.join(self.project_working_directory,
+                                                "db_dump_importer.py")
+                command = "nohup {} {} &".format(self.venv_python_path,
+                                                 db_importer_path
+                                                 )
+                subprocess.Popen(command.split())
 
             elif current_section == "local-db-setting":
                 print("Setting db_dump_exporter cron job...")
                 current_user_cron = CronTab(user=self.current_user)
-                cron_job_command = "{}/.virtualenvs/{}/bin/python ./db_dump_exporter.py".format(self.user_home_dir,
-                                                                                                self.python_venv_name)
+                dump_exporter_path = os.path.join(self.project_working_directory,
+                                                  "db_dump_exporter.py")
+                cron_job_command = "{} {} ".format(self.venv_python_path,
+                                                   dump_exporter_path)
                 job = current_user_cron.new(command=cron_job_command)
                 job.setall("*/5 * * * *")
 
