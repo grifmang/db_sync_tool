@@ -52,7 +52,7 @@ REMOTE_SERVER_CREDENTIAL = {
         "username": "luvm",
     },
     "remote_vps": {
-        "host": "128.199.241.163",
+        "host": "XXX.XXX.XXX.XXX",
         "port": 22,
         "username": "root",
     }
