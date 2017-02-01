@@ -9,6 +9,7 @@ from components import config_handler
 
 
 class SetupConfiguration:
+
     def __init__(self):
         self.python_venv_name = None
         self.venv_python_path = None
@@ -20,7 +21,8 @@ class SetupConfiguration:
 
     def initialize_configuration(self):
         try:
-            self.python_venv_name = raw_input("Enter python virtual environment name: ")
+            self.python_venv_name = raw_input(
+                "Enter python virtual environment name: ")
             if self.python_venv_name != "":
                 self.venv_python_path = os.path.join(self.user_home_dir,
                                                      ".virtualenvs",
@@ -39,7 +41,8 @@ class SetupConfiguration:
                 print("invalid section index value")
                 sys.exit(1)
             current_section = self.config_sections[section_index]
-            current_section_config_dict = self.db_config_handler.get_db_configuration(current_section)
+            current_section_config_dict = self.db_config_handler.get_db_configuration(
+                current_section)
 
             for key, value in current_section_config_dict.items():
                 print("current value: {}=>{}".format(key, value))
@@ -56,7 +59,8 @@ class SetupConfiguration:
             if os.path.exists(pgpass_file_path):
                 os.remove(pgpass_file_path)
 
-            pg_pass_file_content = "*:*:*:*:{}".format(current_section_config_dict['password'])
+            pg_pass_file_content = "*:*:*:*:{}".format(
+                current_section_config_dict['password'])
 
             with open(pgpass_file_path, "wb") as file_handle:
                 file_handle.write(pg_pass_file_content)
@@ -87,7 +91,7 @@ class SetupConfiguration:
                 else:
                     print("Invalid cron job!")
 
-            print ("All Set. Adios Muchachos!!")
+            print("All Set. Adios Muchachos!!")
 
         except Exception as err:
             print err.message

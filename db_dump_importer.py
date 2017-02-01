@@ -14,15 +14,18 @@ class DumpImportRequestHandler(tornado.web.RequestHandler):
             db_config_handler = config_handler.DBConfiguration()
 
             # fetching db configuration through handler
-            db_config_dict = db_config_handler.get_db_configuration("remote-db-setting")
+            db_config_dict = db_config_handler.get_db_configuration(
+                "remote-db-setting")
 
             host = db_config_dict["host"]
             username = db_config_dict["user"]
             dbname = db_config_dict["dbname"]
 
             file_name = self.get_argument("file_name")
-            command = "sh backup.sh {0} {1} {2} {3}".format(host, username, dbname,  file_name)
-            response = subprocess.Popen(command.split(" "), stdout=subprocess.PIPE)
+            command = "sh backup.sh {0} {1} {2} {3}".format(
+                host, username, dbname,  file_name)
+            response = subprocess.Popen(
+                command.split(" "), stdout=subprocess.PIPE)
             out, err = response.communicate()
 
         except Exception as err:
@@ -30,6 +33,7 @@ class DumpImportRequestHandler(tornado.web.RequestHandler):
 
 
 class DumpImporterApplication(tornado.web.Application):
+
     def __init__(self):
         handlers = [
             (r"/import_dump", DumpImportRequestHandler),

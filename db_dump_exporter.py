@@ -7,9 +7,11 @@ import requests as rq
 from components.logger import Logger
 from components.conf import settings
 from components.scp_handler import SCPHandler
-from components.config_handler import  DBConfiguration
+from components.config_handler import DBConfiguration
+
 
 class DumpExporter:
+
     def __init__(self):
         self.pg_dump_path = "/opt/PostgreSQL/9.6/bin/pg_dump"
 
@@ -30,7 +32,8 @@ class DumpExporter:
         }
 
         # initializing scp handler
-        self.scp_handler = SCPHandler(**settings.REMOTE_SERVER_CREDENTIAL["remote_vps"])
+        self.scp_handler = SCPHandler(
+            **settings.REMOTE_SERVER_CREDENTIAL["remote_vps"])
 
         self.error_logger = Logger(**self.log_params["error"])
 
@@ -42,9 +45,11 @@ class DumpExporter:
                 self.db_configuration_dict["user"],
                 self.db_configuration_dict["dbname"],
                 self.db_configuration_dict["port"])
-            response = subprocess.Popen(command.split(" "), stdout=subprocess.PIPE)
+            response = subprocess.Popen(
+                command.split(" "), stdout=subprocess.PIPE)
             out, err = response.communicate()
-            dump_file_name = "dump_{}.sql".format(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+            dump_file_name = "dump_{}.sql".format(
+                datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
             local_dump_path = os.path.join(os.path.dirname(__file__),
                                            "sql_dumps",
                                            dump_file_name)

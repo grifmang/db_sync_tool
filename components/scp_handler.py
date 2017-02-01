@@ -5,16 +5,17 @@ from logger import Logger
 
 
 class SCPHandler:
+
     def __init__(self, host, username, port=22):
         self.sftp = None
         self.sftp_open = False
         private_key_file_path = "/home/sud/.ssh/id_rsa"
-        private_key = paramiko.RSAKey.from_private_key_file(private_key_file_path, password="Adioscrapper13130#")
-
+        private_key = paramiko.RSAKey.from_private_key_file(
+            private_key_file_path, password="Adioscrapper13130#")
 
         # initialize logging parameters
         self.log_params = {
-            "error":{
+            "error": {
                 "file_name": "error.log",
                 "log_dir": settings.LOG_DIR,
                 "stream_handler": True,
@@ -31,7 +32,7 @@ class SCPHandler:
 
         except Exception as err:
             self.logger.logger.error("{}::{}".format("SCPHandler.__init__",
-                                              err.message))
+                                                     err.message))
 
     def open_sftp_connection(self):
         try:
@@ -59,7 +60,7 @@ class SCPHandler:
 
         except paramiko.SSHException as err:
             self.logger.logger.error("{}::{}".format("SCPHandler.put_file",
-                                              err.message))
+                                                     err.message))
 
 
 def main():

@@ -11,13 +11,13 @@ CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__),
 # REMOTE SERVER CREDENTIALS
 REMOTE_SERVER_CREDENTIAL = {
     "my_lubuntu_vm": {
-        "host": "192.168.1.33",
+        "host": "",
         "port": 22,
-        "username": "luvm",
+        "username": "",
     },
     "remote_vps": {
-        "host": "128.199.241.163",
+        "host": "",
         "port": 22,
-        "username": "root",
+        "username": "",
     }
 }
