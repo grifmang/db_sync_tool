@@ -1,4 +1,5 @@
 # db_sync_tool 
+[![Build Status](https://travis-ci.org/corsecotech/db_sync_tool.svg?branch=master)](https://travis-ci.org/corsecotech/db_sync_tool)
 
 # Table of Contents
 
