@@ -41,8 +41,8 @@ class SCPHandler:
                 self.sftp_open = True
 
         except Exception as err:
-            self.logger.error("{}::{}".format("SCPHandler.open_sftp_connection",
-                                              err.message))
+            self.logger.error("{}::{}".format(
+                "SCPHandler.open_sftp_connection", err.message))
 
     def get_file(self, remote_path, local_path=None):
         try:

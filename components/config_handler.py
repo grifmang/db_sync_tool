@@ -25,4 +25,3 @@ class DBConfiguration:
                 self.config_parser.set(section, key, value)
             with open(self.config_file_path, "wb") as config_file_handle:
                 self.config_parser.write(config_file_handle)
-

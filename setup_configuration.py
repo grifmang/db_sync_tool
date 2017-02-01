@@ -37,11 +37,11 @@ class SetupConfiguration:
 
             print("\n")
             section_index = int(raw_input())
-            if not type(section_index) == int and section_index < len(self.config_sections):
+            if not type(section_index) == int and section_index < len(self.config_sections):  # noqa
                 print("invalid section index value")
                 sys.exit(1)
             current_section = self.config_sections[section_index]
-            current_section_config_dict = self.db_config_handler.get_db_configuration(
+            current_section_config_dict = self.db_config_handler.get_db_configuration(  # noqa
                 current_section)
 
             for key, value in current_section_config_dict.items():
@@ -51,7 +51,7 @@ class SetupConfiguration:
                 print("\n")
 
             self.db_config_handler.set_db_configuration(current_section,
-                                                        current_section_config_dict)
+                                                        current_section_config_dict)  # noqa
 
             print("Creating pgpass file in home directory...")
             pgpass_file_path = os.path.join(os.environ["HOME"],
@@ -79,8 +79,9 @@ class SetupConfiguration:
             elif current_section == "local-db-setting":
                 print("Setting db_dump_exporter cron job...")
                 current_user_cron = CronTab(user=self.current_user)
-                dump_exporter_path = os.path.join(self.project_working_directory,
-                                                  "db_dump_exporter.py")
+                dump_exporter_path = os.path.join(
+                    self.project_working_directory,
+                    "db_dump_exporter.py")
                 cron_job_command = "{} {} ".format(self.venv_python_path,
                                                    dump_exporter_path)
                 job = current_user_cron.new(command=cron_job_command)

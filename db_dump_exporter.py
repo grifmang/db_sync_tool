@@ -39,7 +39,8 @@ class DumpExporter:
 
     def get_dump(self):
         try:
-            command = "{0} --host={1} --username={2} --dbname={3} --port={4} --inserts --data-only".format(
+            command = "{0} --host={1} --username={2} \
+            --dbname={3} --port={4} --inserts --data-only".format(
                 self.pg_dump_path,
                 self.db_configuration_dict["host"],
                 self.db_configuration_dict["user"],
@@ -70,8 +71,9 @@ class DumpExporter:
 
         except Exception as err:
             print err.message
-            self.error_logger.logger.error("{}::{}".format("DumpExporter.get_dump",
-                                                           err.message))
+            self.error_logger.logger.error("{}::{}".
+                                           format("DumpExporter.get_dump",
+                                                  err.message))
 
 
 def main():
