@@ -7,15 +7,17 @@ import requests as rq
 from components.logger import Logger
 from components.conf import settings
 from components.scp_handler import SCPHandler
-
+from components.config_handler import  DBConfiguration
 
 class DumpExporter:
     def __init__(self):
         self.pg_dump_path = "/opt/PostgreSQL/9.6/bin/pg_dump"
-        self.user = "postgres"
-        self.host = "localhost"
-        self.db_name = "corseco_dashboard"
-        self.port = 5432
+
+        # initializing DB Configuration Handler
+        self.db_config_handler = DBConfiguration()
+
+        # fetching DB configuration
+        self.db_configuration_dict = self.db_config_handler
 
         # initialize logging parameters
         self.log_params = {
@@ -28,24 +30,25 @@ class DumpExporter:
         }
 
         # initializing scp handler
-        self.scp_handler = SCPHandler(**settings.REMOTE_SERVER_CREDENTIAL["my_lubuntu_vm"])
+        self.scp_handler = SCPHandler(**settings.REMOTE_SERVER_CREDENTIAL["remote_vps"])
 
         self.error_logger = Logger(**self.log_params["error"])
 
     def get_dump(self):
         try:
-            command = "{0} --host={1} --username={2} --dbname={3} --port={4}".format(self.pg_dump_path,
-                                                                                     self.host,
-                                                                                     self.user,
-                                                                                     self.db_name,
-                                                                                     self.port)
+            command = "{0} --host={1} --username={2} --dbname={3} --port={4} --inserts --data-only".format(
+                self.pg_dump_path,
+                self.db_configuration_dict["host"],
+                self.db_configuration_dict["user"],
+                self.db_configuration_dict["dbname"],
+                self.db_configuration_dict["port"])
             response = subprocess.Popen(command.split(" "), stdout=subprocess.PIPE)
             out, err = response.communicate()
             dump_file_name = "dump_{}.sql".format(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
             local_dump_path = os.path.join(os.path.dirname(__file__),
                                            "sql_dumps",
                                            dump_file_name)
-            remote_dump_path = "/home/luvm/{}".format(dump_file_name)
+            remote_dump_path = "/root/{}".format(dump_file_name)
 
             with open(local_dump_path, "wb") as file_handle:
                 file_handle.write(out)
@@ -53,10 +56,10 @@ class DumpExporter:
                                       remote_path=remote_dump_path)
 
             remote_url = "http://{}:8002/import_dump".format(
-                settings.REMOTE_SERVER_CREDENTIAL["my_lubuntu_vm"]["host"]
+                settings.REMOTE_SERVER_CREDENTIAL["remote_vps"]["host"]
             )
 
-            post_data = {"file_name": remote_dump_path }
+            post_data = {"file_name": remote_dump_path}
             response = rq.post(remote_url, data=post_data)
             print response.status_code
 
