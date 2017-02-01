@@ -1,0 +1,15 @@
+language: python
+sudo: false
+python:
+- '2.7.11'
+
+install:
+  - pip install -r requirements-dev.txt
+
+script:
+- flake8
+
+notifications:
+  email:
+    on_success: change  # [always|never|change]
+    on_failure: always  # [always|never|change]
