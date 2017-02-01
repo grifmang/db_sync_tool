@@ -1,0 +1,16 @@
+[local-db-setting]
+vendor = 
+host = localhost
+port = 5432
+user = postgres
+dbname = corseco_dashboard
+password = Goodguygordon13130#
+
+[remote-db-setting]
+vendor = 
+host = 
+port = 
+user = 
+dbname = 
+password = 
+
