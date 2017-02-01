@@ -3,17 +3,25 @@ import subprocess
 from tornado.ioloop import IOLoop
 import tornado.web
 
+from components import config_handler
+
 
 class DumpImportRequestHandler(tornado.web.RequestHandler):
 
     def post(self, *args, **kwargs):
         try:
-            host = "localhost"
-            username = "postgres"
+            # initializing DB Configuration Handler
+            db_config_handler = config_handler.DBConfiguration()
+
+            # fetching db configuration through handler
+            db_config_dict = db_config_handler.get_db_configuration("remote-db-setting")
+
+            host = db_config_dict["host"]
+            username = db_config_dict["user"]
+            dbname = db_config_dict["dbname"]
+
             file_name = self.get_argument("file_name")
-            command = "cat {0} | psql --host={1} --username={2}".format(file_name,
-                                                                        host,
-                                                                        username)
+            command = "sh backup.sh {0} {1} {2} {3}".format(host, username, dbname,  file_name)
             response = subprocess.Popen(command.split(" "), stdout=subprocess.PIPE)
             out, err = response.communicate()
 
